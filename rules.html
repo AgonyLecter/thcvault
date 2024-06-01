@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THC Vault - Rules</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.3.1/css/hover-min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Press Start 2P', cursive;
+            background-color: black;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .logo {
+            max-width: 200px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: red;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+            animation: flicker 2s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                text-shadow: 0 0 4px rgba(255, 0, 0, 0.7), 0 0 11px rgba(255, 0, 0, 0.7), 0 0 19px rgba(255, 0, 0, 0.7), 0 0 40px rgba(255, 0, 0, 0.7);
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+            }
+        }
+
+        .rules {
+            max-width: 600px;
+            margin-top: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .rules:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
+        }
+
+        .rules img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        .rules h2 {
+            font-size: 1.5rem;
+            color: #00ff00;
+            text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00;
+            text-align: center;
+        }
+
+        .rule-list {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .rule-list li {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            opacity: 0;
+        }
+
+        .back-icon {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 2rem;
+            color: #00ff00;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .back-icon:hover {
+            color: #ff0000;
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('your-logo-file-path.png') no-repeat center center;
+            background-size: cover;
+            opacity: 0.05;
+            z-index: -1;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .rules h2 {
+                font-size: 1.2rem;
+            }
+            .rule-list li {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            .rules h2 {
+                font-size: 1rem;
+            }
+            .rule-list li {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-image"></div>
+    <a href="index.html" class="back-icon" aria-label="Go back to home">
+        <i class="fas fa-cannabis"></i>
+    </a>
+    <div class="container">
+        <img src="logo.png" alt="THC Vault Logo" class="logo">
+        <h1>Rules</h1>
+        
+        <div class="rules">
+            <img src="rules.png" alt="Rules">
+            <h2>Regulations</h2>
+            <ul class="rule-list">
+                <li>Minimum age 18 years.</li>
+                <li>Advance payment via bank transfer.</li>
+                <li>Absolutely NO ALCOHOL.</li>
+                <li>Guaranteed fun.</li>
+                <li>Maximum discretion.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        gsap.from(".logo", {
+            duration: 1,
+            scale: 0.5,
+            opacity: 0,
+            ease: "back.out(1.7)"
+        });
+
+        gsap.from(".rules", {
+            duration: 1,
+            scale: 0.8,
+            opacity: 0,
+            ease: "back.out(1.7)",
+            delay: 0.5
+        });
+
+        gsap.from(".back-icon", {
+            duration: 1,
+            x: -50,
+            opacity: 0,
+            ease: "back.out(1.7)"
+        });
+
+        gsap.to(".rule-list li", {
+            duration: 1,
+            opacity: 1,
+            stagger: 0.5,
+            delay: 1
+        });
+    </script>
+</body>
+</html>

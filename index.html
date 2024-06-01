@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THC Vault - Tenerife</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.3.1/css/hover-min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Press Start 2P', cursive;
+            background-color: black;
+            color: white;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            flex-direction: column;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .logo {
+            max-width: 200px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: red;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+            animation: flicker 2s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                text-shadow: 0 0 4px rgba(255, 0, 0, 0.7), 0 0 11px rgba(255, 0, 0, 0.7), 0 0 19px rgba(255, 0, 0, 0.7), 0 0 40px rgba(255, 0, 0, 0.7);
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+            }
+        }
+
+        .glitch {
+            color: white;
+            font-size: 1.5rem;
+            animation: glitch 1s linear infinite;
+        }
+
+        @keyframes glitch {
+            0% {
+                text-shadow: 2px 2px red, -2px -2px blue;
+            }
+            50% {
+                text-shadow: -2px -2px red, 2px 2px blue;
+            }
+            100% {
+                text-shadow: 2px 2px red, -2px -2px blue;
+            }
+        }
+
+        .intro {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            max-width: 80%;
+            line-height: 1.5;
+            opacity: 0;
+        }
+
+        .leaf-icon {
+            margin-top: 30px;
+            font-size: 3rem;
+            color: #00ff00;
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .leaf-icon:hover {
+            transform: scale(1.1);
+            color: #ff0000;
+        }
+
+        .rules-icon {
+            margin-top: 20px;
+            font-size: 2rem;
+            color: #00ff00;
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .rules-icon:hover {
+            transform: scale(1.1);
+            color: #ff0000;
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('your-logo-file-path.png') no-repeat center center;
+            background-size: cover;
+            opacity: 0.05;
+            z-index: -1;
+        }
+
+        .neon-text {
+            font-size: 2rem;
+            color: rgba(0, 255, 0, 0.5);
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5), 0 0 10px rgba(0, 255, 0, 0.5), 0 0 15px rgba(0, 255, 0, 0.5), 0 0 20px rgba(0, 255, 0, 0.5), 0 0 25px rgba(0, 255, 0, 0.5), 0 0 30px rgba(0, 255, 0, 0.5), 0 0 35px rgba(0, 255, 0, 0.5);
+            animation: neon-blink 1.5s infinite alternate;
+        }
+
+        @keyframes neon-blink {
+            from {
+                text-shadow: 0 0 5px rgba(0, 255, 0, 0.5), 0 0 10px rgba(0, 255, 0, 0.5), 0 0 15px rgba(0, 255, 0, 0.5), 0 0 20px rgba(0, 255, 0, 0.5), 0 0 25px rgba(0, 255, 0, 0.5), 0 0 30px rgba(0, 255, 0, 0.5), 0 0 35px rgba(0, 255, 0, 0.5);
+            }
+            to {
+                text-shadow: 0 0 2px rgba(0, 255, 0, 0.5), 0 0 5px rgba(0, 255, 0, 0.5), 0 0 7px rgba(0, 255, 0, 0.5), 0 0 10px rgba(0, 255, 0, 0.5), 0 0 12px rgba(0, 255, 0, 0.5), 0 0 15px rgba(0, 255, 0, 0.5), 0 0 17px rgba(0, 255, 0, 0.5);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            .intro {
+                font-size: 1rem;
+            }
+            .neon-text {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .intro {
+                font-size: 0.9rem;
+            }
+            .neon-text {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="background-image"></div>
+        <img src="logo.png" alt="THC Vault Logo" class="logo">
+        <h1>THC Vault</h1>
+        <p class="glitch">Tenerife's Ultimate Cannabis Club Tour</p>
+        <p class="intro">Join us for an unforgettable journey through the best cannabis clubs in Tenerife. Experience top-tier strains, exquisite environments, and a vibrant community. Secure your spot today and dive into the world of premium cannabis culture.</p>
+        <a href="pacchetti.html" aria-label="Start Your Adventure">
+            <i class="fas fa-cannabis leaf-icon"></i>
+        </a>
+        <a href="rules.html" aria-label="View Rules">
+            <i class="fas fa-book rules-icon"></i>
+        </a>
+        <p class="neon-text">Discover the Future of Cannabis Tourism</p>
+    </div>
+
+    <script>
+        gsap.from(".leaf-icon", {
+            duration: 1,
+            scale: 0.5,
+            opacity: 0,
+            ease: "back.out(1.7)"
+        });
+
+        gsap.to(".intro", {
+            duration: 3,
+            opacity: 1,
+            ease: "power2.out",
+            delay: 0.5
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
