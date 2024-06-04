@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View incoming bookings for THC Vault.">
+    <meta name="keywords" content="Weed, Cannabis Club, Tenerife, Bookings, THC Vault, Cannabis Tourism, Premium Cannabis, Cannabis Culture, 2025">
+    <meta name="author" content="THC Vault">
+    <meta name="google" content="notranslate">
+    <link rel="icon" href="logo.ico" type="image/x-icon">
+    <title>THC Vault - Booking Reception</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Press Start 2P', cursive;
+            background-color: black;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: red;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+            animation: flicker 2s infinite;
+            text-align: center;
+        }
+
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                text-shadow: 0 0 4px rgba(255, 0, 0, 0.7), 0 0 11px rgba(255, 0, 0, 0.7), 0 0 19px rgba(255, 0, 0, 0.7), 0 0 40px rgba(255, 0, 0, 0.7);
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+            }
+        }
+
+        .booking-list {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            overflow-y: auto;
+            max-height: 70vh;
+        }
+
+        .booking {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: rgba(0, 255, 0, 0.1);
+            border-left: 5px solid #00ff00;
+            position: relative;
+        }
+
+        .booking p {
+            margin: 0;
+            padding: 2px 0;
+        }
+
+        .delete-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #00ff00;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyA49iSn7qBR7TaL9q4l8X1a0HmFOaudtxs",
+            authDomain: "thcvault-6a800.firebaseapp.com",
+            databaseURL: "https://thcvault-6a800-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "thcvault-6a800",
+            storageBucket: "thcvault-6a800.appspot.com",
+            messagingSenderId: "746310807606",
+            appId: "1:746310807606:web:20ccf6ea569cbf68f0a897",
+            measurementId: "G-GT435NPY50"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.database();
+
+        function fetchBookings() {
+            db.ref('bookings').on('value', (snapshot) => {
+                const bookings = snapshot.val();
+                const bookingList = document.getElementById('booking-list');
+                bookingList.innerHTML = ''; // Clear the list before adding new items
+
+                for (let id in bookings) {
+                    const booking = bookings[id];
+                    const bookingElement = document.createElement('div');
+                    bookingElement.classList.add('booking');
+                    bookingElement.innerHTML = `
+                        <p><strong>Name:</strong> ${booking.name}</p>
+                        <p><strong>Email:</strong> ${booking.email}</p>
+                        <p><strong>Phone:</strong> ${booking.phone}</p>
+                        <p><strong>Package:</strong> ${booking.package}</p>
+                        <p><strong>Timestamp:</strong> ${new Date(booking.timestamp).toLocaleString()}</p>
+                        <button class="delete-button" onclick="deleteBooking('${id}')">Delete</button>
+                    `;
+                    bookingList.appendChild(bookingElement);
+                }
+            });
+        }
+
+        function deleteBooking(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    db.ref('bookings/' + id).remove()
+                        .then(() => {
+                            Swal.fire(
+                                'Deleted!',
+                                'The booking has been deleted.',
+                                'success'
+                            );
+                        })
+                        .catch((error) => {
+                            console.error('Error deleting booking:', error);
+                            Swal.fire(
+                                'Error!',
+                                'An error occurred while deleting the booking.',
+                                'error'
+                            );
+                        });
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            fetchBookings();
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Incoming Bookings</h1>
+        <div id="booking-list" class="booking-list">
+            <!-- Bookings will be displayed here -->
+        </div>
+        <div class="footer">
+            &copy; 2025 THC Vault. All rights reserved.
+        </div>
+    </div>
+</body>
+</html>
+
+
