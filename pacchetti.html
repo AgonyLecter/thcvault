@@ -92,16 +92,6 @@
             color: #00ff00;
             text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00;
             text-align: center;
-            animation: neon 1.5s ease-in-out infinite alternate;
-        }
-
-        @keyframes neon {
-            from {
-                text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 40px #00ff00, 0 0 80px #00ff00, 0 0 90px #00ff00, 0 0 100px #00ff00, 0 0 150px #00ff00;
-            }
-            to {
-                text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00, 0 0 40px #00ff00, 0 0 50px #00ff00, 0 0 60px #00ff00, 0 0 70px #00ff00, 0 0 100px #00ff00;
-            }
         }
 
         .package p {
@@ -216,11 +206,22 @@
         .swal2-title {
             font-family: 'Press Start 2P', cursive !important;
             color: #00ff00;
-            text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+            text-shadow: none;
         }
 
         .swal2-html-container {
             color: #ffffff;
+        }
+
+        .iti.iti--allow-dropdown {
+            width: 100%;
+        }
+        .iti.iti--allow-dropdown input {
+            width: 100%;
+            padding-right: 40px; /* Adjust as necessary */
+        }
+        .iti__flag-container {
+            top: 10px; /* Adjust to align the flag properly */
         }
     </style>
     <script>
@@ -379,6 +380,7 @@
     </div>
 </body>
 </html>
+
 
 
 
