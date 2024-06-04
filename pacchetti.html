@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THC Vault - Packages</title>
+    <meta name="description" content="Discover the exclusive cannabis club tours in Tenerife with THC Vault. Experience top-quality strains, exquisite environments, and a vibrant community. Book your adventure now.">
+    <meta name="keywords" content="Weed, Cannabis Club, Tenerife, Exclusive Tours, THC Vault, Cannabis Tourism, Premium Cannabis, Cannabis Culture, 2025">
+    <meta name="author" content="THC Vault">
+    <meta name="google" content="notranslate">
+    <title>THC Vault - Exclusive Cannabis Club Tours in Tenerife 2025</title>
+    <link rel="icon" href="logo.ico" type="image/x-icon">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.3.1/css/hover-min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
@@ -31,6 +42,7 @@
         .logo {
             max-width: 200px;
             animation: pulse 2s infinite;
+            filter: brightness(0.8) contrast(1.5) saturate(1.2);
         }
 
         @keyframes pulse {
@@ -116,21 +128,13 @@
             transform: scale(1.1);
         }
 
-        .social-icons {
-            margin-top: 20px;
-            display: none;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .social-icons a {
-            color: white;
-            font-size: 2rem;
-            transition: color 0.3s ease;
-        }
-
-        .social-icons a:hover {
-            color: #ff0000;
+        .booking-form input {
+            margin: 5px 0;
+            padding: 10px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
         }
 
         .back-icon {
@@ -153,10 +157,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('your-logo-file-path.png') no-repeat center center;
+            background: url('logo.png') no-repeat center center;
             background-size: cover;
             opacity: 0.05;
             z-index: -1;
+            filter: brightness(0.6) contrast(1.2);
         }
 
         @media (max-width: 768px) {
@@ -167,6 +172,10 @@
                 font-size: 1.2rem;
             }
             .package p {
+                font-size: 0.9rem;
+            }
+            .book-button {
+                padding: 8px 16px;
                 font-size: 0.9rem;
             }
         }
@@ -181,8 +190,116 @@
             .package p {
                 font-size: 0.8rem;
             }
+            .book-button {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+        }
+
+        .swal2-popup {
+            font-size: 1.6rem !important;
+            font-family: 'Press Start 2P', cursive !important;
         }
     </style>
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyA49iSn7qBR7TaL9q4l8X1a0HmFOaudtxs",
+            authDomain: "thcvault-6a800.firebaseapp.com",
+            databaseURL: "https://thcvault-6a800-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "thcvault-6a800",
+            storageBucket: "thcvault-6a800.appspot.com",
+            messagingSenderId: "746310807606",
+            appId: "1:746310807606:web:20ccf6ea569cbf68f0a897",
+            measurementId: "G-GT435NPY50"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+        function openBookingForm(packageName) {
+            Swal.fire({
+                title: 'Book ' + packageName,
+                html:
+                    '<input id="swal-input1" class="swal2-input" placeholder="Name">' +
+                    '<input id="swal-input2" class="swal2-input" placeholder="Email">' +
+                    '<input id="swal-input3" class="swal2-input" placeholder="Phone Number">',
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Submit',
+                didOpen: () => {
+                    const input = document.getElementById('swal-input3');
+                    window.intlTelInput(input, {
+                        initialCountry: "auto",
+                        geoIpLookup: function(callback) {
+                            fetch('https://ipinfo.io/json')
+                                .then(response => response.json())
+                                .then(data => callback(data.country))
+                                .catch(() => callback('US'));
+                        },
+                        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+                    });
+                },
+                preConfirm: () => {
+                    return [
+                        document.getElementById('swal-input1').value,
+                        document.getElementById('swal-input2').value,
+                        document.getElementById('swal-input3').value
+                    ]
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const name = result.value[0];
+                    const email = result.value[1];
+                    const phone = result.value[2];
+                    const timestamp = new Date().toISOString();
+
+                    if (name && email && phone) {
+                        db.collection("bookings").add({
+                            name: name,
+                            email: email,
+                            phone: phone,
+                            package: packageName,
+                            timestamp: timestamp
+                        })
+                        .then(() => {
+                            Swal.fire('Booking Successful!', '', 'success');
+                        })
+                        .catch((error) => {
+                            console.error("Error booking: ", error);
+                            Swal.fire('Booking Failed', '', 'error');
+                        });
+                    } else {
+                        Swal.fire('Please fill in all fields.', '', 'error');
+                    }
+                }
+            })
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            gsap.from(".logo", {
+                duration: 1,
+                scale: 0.5,
+                opacity: 0,
+                ease: "back.out(1.7)"
+            });
+
+            gsap.from(".package", {
+                duration: 1,
+                scale: 0.8,
+                opacity: 0,
+                ease: "back.out(1.7)",
+                stagger: 0.3
+            });
+
+            gsap.from(".back-icon", {
+                duration: 1,
+                x: -50,
+                opacity: 0,
+                ease: "back.out(1.7)"
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="background-image"></div>
@@ -197,93 +314,25 @@
             <img src="pack1.png" alt="Package 1">
             <h2>Package 1</h2>
             <p>Tour of one of the best Cannabis Clubs in Tenerife. Top quality, top service. You will feel guided and assisted in your Cannabis tasting. Cost 20€ per person, products purchased at the club are at the client's expense. 1 welcome joint per person.</p>
-            <button class="book-button" onclick="showSocialIcons('socialIcons1')">Book Now</button>
-            <div class="social-icons" id="socialIcons1">
-                <a href="https://instagram.com" target="_blank" aria-label="Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="https://telegram.org" target="_blank" aria-label="Telegram">
-                    <i class="fab fa-telegram-plane"></i>
-                </a>
-                <a href="https://facebook.com" target="_blank" aria-label="Facebook">
-                    <i class="fab fa-facebook"></i>
-                </a>
-            </div>
+            <button class="book-button" onclick="openBookingForm('Package 1')">Book Now</button>
         </div>
 
         <div class="package">
             <img src="pack2.png" alt="Package 2">
             <h2>Package 2</h2>
             <p>Tour of two of the best Cannabis Clubs in Tenerife. Top quality, top service. You will feel guided and assisted in your Cannabis tasting. Cost 20€ per person, products purchased at the club are at the client's expense. 1 welcome joint per person.</p>
-            <button class="book-button" onclick="showSocialIcons('socialIcons2')">Book Now</button>
-            <div class="social-icons" id="socialIcons2">
-                <a href="https://instagram.com" target="_blank" aria-label="Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="https://telegram.org" target="_blank" aria-label="Telegram">
-                    <i class="fab fa-telegram-plane"></i>
-                </a>
-                <a href="https://facebook.com" target="_blank" aria-label="Facebook">
-                    <i class="fab fa-facebook"></i>
-                </a>
-            </div>
+            <button class="book-button" onclick="openBookingForm('Package 2')">Book Now</button>
         </div>
 
         <div class="package">
             <img src="dinner.png" alt="Dinner Weed">
             <h2>Dinner Weed</h2>
             <p>Dinner Weed. Cannabis-based dinner in a private villa. You will be introduced to a 3-course THC-infused tasting (starter, main course or second course, dessert), accompanied by extra smoking cannabis and a non-alcoholic cocktail. 350€ per person. Maximum 4 people. Alcohol is strictly prohibited during the dinner and prior to it. If you show up drunk to the appointment, you will not be allowed to participate, and you will lose your payment.</p>
-            <button class="book-button" onclick="showSocialIcons('socialIcons3')">Book Now</button>
-            <div class="social-icons" id="socialIcons3">
-                <a href="https://instagram.com" target="_blank" aria-label="Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="https://telegram.org" target="_blank" aria-label="Telegram">
-                    <i class="fab fa-telegram-plane"></i>
-                </a>
-                <a href="https://facebook.com" target="_blank" aria-label="Facebook">
-                    <i class="fab fa-facebook"></i>
-                </a>
-            </div>
+            <button class="book-button" onclick="openBookingForm('Dinner Weed')">Book Now</button>
         </div>
     </div>
-
-    <script>
-        gsap.from(".logo", {
-            duration: 1,
-            scale: 0.5,
-            opacity: 0,
-            ease: "back.out(1.7)"
-        });
-
-        gsap.from(".package", {
-            duration: 1,
-            scale: 0.8,
-            opacity: 0,
-            ease: "back.out(1.7)",
-            stagger: 0.3
-        });
-
-        gsap.from(".back-icon", {
-            duration: 1,
-            x: -50,
-            opacity: 0,
-            ease: "back.out(1.7)"
-        });
-
-        function showSocialIcons(id) {
-            const socialIcons = document.getElementById(id);
-            if (socialIcons.style.display === "none" || socialIcons.style.display === "") {
-                gsap.to(socialIcons, { duration: 0.5, opacity: 1, display: 'flex' });
-            } else {
-                gsap.to(socialIcons, { duration: 0.5, opacity: 0, display: 'none' });
-            }
-        }
-    </script>
 </body>
 </html>
-
-
 
 
 
