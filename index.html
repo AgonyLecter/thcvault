@@ -22,17 +22,23 @@
             background-color: black;
             color: white;
             overflow: hidden;
+            position: relative;
+            min-height: 100vh;
+            box-sizing: border-box;
+            padding-bottom: 100px; /* Altezza del footer */
         }
 
         .container {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: calc(100vh - 100px); /* Altezza minima per evitare sovrapposizioni con il footer */
             text-align: center;
             flex-direction: column;
             position: relative;
             padding: 0 20px;
+            box-sizing: border-box;
+            padding-bottom: 70px; /* Spazio aggiuntivo per evitare sovrapposizioni */
         }
 
         .logo {
@@ -83,6 +89,7 @@
             max-width: 90%;
             line-height: 1.5;
             opacity: 0;
+            height: 5rem; /* Aggiunto per prevenire cambiamenti di layout */
         }
 
         .icon-container {
@@ -91,6 +98,8 @@
             width: 100%;
             max-width: 400px;
             margin-top: 20px;
+            position: absolute;
+            bottom: 30px; /* Posizionamento fisso più basso rispetto al fondo */
         }
 
         .icon-container a {
@@ -153,10 +162,14 @@
         }
 
         .footer {
-            margin-top: 50px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 50px; /* Altezza del footer */
             font-size: 0.8rem;
             color: #00ff00;
             text-align: center;
+            line-height: 50px; /* Allinea il testo verticalmente */
         }
 
         @media (max-width: 768px) {
@@ -185,6 +198,15 @@
                 font-size: 2rem;
             }
         }
+
+        /* Disabilita la selezione del testo e il clic destro */
+        body, html {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
     </style>
 </head>
 <body>
@@ -210,7 +232,7 @@
                     <span class="tooltip">Facebook</span>
                 </i>
             </a>
-            <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
+            <a href="https://www.instagram.com/thc.vault/?igsh=d2p6MTUxMnQzZGht" target="_blank" aria-label="Instagram">
                 <i class="fab fa-instagram">
                     <span class="tooltip">Instagram</span>
                 </i>
@@ -247,6 +269,9 @@
                 introText.textContent += char;
             }, 75 * i);
         });
+
+        // Disabilita il clic destro
+        document.addEventListener('contextmenu', event => event.preventDefault());
     </script>
 </body>
 </html>
