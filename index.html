@@ -22,23 +22,21 @@
             background-color: black;
             color: white;
             overflow: hidden;
-            position: relative;
+            display: flex;
+            flex-direction: column;
             min-height: 100vh;
-            box-sizing: border-box;
-            padding-bottom: 100px; /* Altezza del footer */
         }
 
         .container {
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: calc(100vh - 100px); /* Altezza minima per evitare sovrapposizioni con il footer */
             text-align: center;
             flex-direction: column;
             position: relative;
-            padding: 0 20px;
+            padding: 20px;
             box-sizing: border-box;
-            padding-bottom: 70px; /* Spazio aggiuntivo per evitare sovrapposizioni */
         }
 
         .logo {
@@ -89,7 +87,7 @@
             max-width: 90%;
             line-height: 1.5;
             opacity: 0;
-            height: 5rem; /* Aggiunto per prevenire cambiamenti di layout */
+            min-height: 5rem; /* Assicura spazio per il testo animato */
         }
 
         .icon-container {
@@ -98,8 +96,7 @@
             width: 100%;
             max-width: 400px;
             margin-top: 20px;
-            position: absolute;
-            bottom: 30px; /* Posizionamento fisso più basso rispetto al fondo */
+            padding-bottom: 20px; /* Aggiunto spazio per evitare sovrapposizione */
         }
 
         .icon-container a {
@@ -150,6 +147,7 @@
             color: rgba(0, 255, 0, 0.5);
             text-shadow: 0 0 5px rgba(0, 255, 0, 0.5), 0 0 10px rgba(0, 255, 0, 0.5), 0 0 15px rgba(0, 255, 0, 0.5), 0 0 20px rgba(0, 255, 0, 0.5), 0 0 25px rgba(0, 255, 0, 0.5), 0 0 30px rgba(0, 255, 0, 0.5), 0 0 35px rgba(0, 255, 0, 0.5);
             animation: neon-blink 1.5s infinite alternate;
+            margin-bottom: 50px; /* Aggiunto spazio per evitare sovrapposizione */
         }
 
         @keyframes neon-blink {
@@ -157,19 +155,17 @@
                 text-shadow: 0 0 5px rgba(0, 255, 0, 0.5), 0 0 10px rgba(0, 255, 0, 0.5), 0 0 15px rgba(0, 255, 0, 0.5), 0 0 20px rgba(0, 255, 0, 0.5), 0 0 25px rgba(0, 255, 0, 0.5), 0 0 30px rgba(0, 255, 0, 0.5), 0 0 35px rgba(0, 255, 0, 0.5);
             }
             to {
-                text-shadow: 0 0 2px rgba(0, 255, 0, 0.5), 0 0 5px rgba(0, 255, 0, 0.5), 0 0 7px rgba(0, 255, 0, 0.5), 0 0 10px rgba(0, 255, 0, 0.5), 0 0 12px rgba(0, 255, 0, 0.5), 0 0 15px rgba(0, 255, 0, 0.5), 0 0 17px rgba(0, 255, 0, 0.5);
+                text-shadow: 0 0 2px rgba(0, 255, 0, 0.5), 0 0 5px rgba(0, 255, 0, 0.5), 0 0 7px rgba(0, 255, 0, 0.5), 0 0 10px rgba(0, 255, 0, 0, 0.5), 0 0 12px rgba(0, 255, 0, 0.5), 0 0 15px rgba(0, 255, 0, 0.5), 0 0 17px rgba(0, 255, 0, 0.5);
             }
         }
 
         .footer {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 50px; /* Altezza del footer */
+            height: 50px;
             font-size: 0.8rem;
             color: #00ff00;
             text-align: center;
             line-height: 50px; /* Allinea il testo verticalmente */
+            background: black;
         }
 
         @media (max-width: 768px) {
@@ -181,6 +177,7 @@
             }
             .neon-text {
                 font-size: 1.2rem;
+                margin-bottom: 30px; /* Aggiungi più spazio per dispositivi più piccoli */
             }
         }
 
@@ -193,6 +190,7 @@
             }
             .neon-text {
                 font-size: 1rem;
+                margin-bottom: 20px; /* Aggiungi più spazio per dispositivi più piccoli */
             }
             .icon-container a {
                 font-size: 2rem;
