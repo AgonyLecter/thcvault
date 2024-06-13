@@ -1,0 +1,23 @@
+{
+    "name": "THC Vault Bookings",
+    "short_name": "THC Vault",
+    "description": "View incoming bookings for THC Vault.",
+    "start_url": "/riserve.html",
+    "scope": "/riserve.html",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#ff0000",
+    "icons": [
+      {
+        "src": "cannabis.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "cannabis.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  
