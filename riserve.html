@@ -8,6 +8,7 @@
     <meta name="author" content="THC Vault">
     <meta name="google" content="notranslate">
     <link rel="icon" href="logo.ico" type="image/x-icon">
+    <link rel="manifest" href="manifest.json">
     <title>THC Vault - Booking Reception</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
@@ -15,6 +16,17 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
@@ -68,6 +80,9 @@
             background-color: rgba(0, 255, 0, 0.1);
             border-left: 5px solid #00ff00;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            word-wrap: break-word;
         }
 
         .booking p {
@@ -99,11 +114,32 @@
             h1 {
                 font-size: 2rem;
             }
+            .booking {
+                padding: 5px;
+            }
+            .delete-button {
+                top: 5px;
+                right: 5px;
+                font-size: 0.7rem;
+                padding: 3px 6px;
+            }
         }
 
         @media (max-width: 480px) {
             h1 {
                 font-size: 1.5rem;
+            }
+            .booking {
+                padding: 5px;
+            }
+            .booking p {
+                font-size: 0.8rem;
+            }
+            .delete-button {
+                top: 5px;
+                right: 5px;
+                font-size: 0.7rem;
+                padding: 3px 6px;
             }
         }
     </style>
