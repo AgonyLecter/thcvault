@@ -28,6 +28,11 @@
             background-color: black;
             color: white;
             overflow-x: hidden;
+            -webkit-user-select: none; /* Chrome, Safari, Opera */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+            -webkit-touch-callout: none; /* Disable callout, replaces contextmenu in some devices */
         }
 
         .container {
@@ -224,6 +229,41 @@
             top: 10px; /* Adjust to align the flag properly */
         }
     </style>
+</head>
+<body>
+    <div class="background-image"></div>
+    <a href="index.html" class="back-icon" aria-label="Go back to home">
+        <i class="fas fa-cannabis"></i>
+    </a>
+    <div class="container">
+        <img src="logo.png" alt="THC Vault Logo" class="logo">
+        <h1>Our Cannabis Club Tours</h1>
+
+        <div class="package">
+            <img src="pack1.png" alt="Package 1">
+            <h2>Package 1</h2>
+            <p>Tour of one of the best Cannabis Clubs in Tenerife. Top quality, top service. You will feel guided and assisted in your Cannabis tasting. Cost 20€ per person, products purchased at the club are at the client's expense. 1 welcome joint per person.</p>
+            <button class="book-button" onclick="openBookingForm('Package 1')">Book Now</button>
+        </div>
+
+        <div class="package">
+            <img src="pack2.png" alt="Package 2">
+            <h2>Package 2</h2>
+            <p>Tour of two of the best Cannabis Clubs in Tenerife. Top quality, top service. You will feel guided and assisted in your Cannabis tasting. Cost 20€ per person, products purchased at the club are at the client's expense. 1 welcome joint per person.</p>
+            <button class="book-button" onclick="openBookingForm('Package 2')">Book Now</button>
+        </div>
+
+        <div class="package">
+            <img src="dinner.png" alt="Dinner Weed">
+            <h2>Dinner Weed</h2>
+            <p>Dinner Weed. Cannabis-based dinner in a private villa. You will be introduced to a 3-course THC-infused tasting (starter, main course or second course, dessert), accompanied by extra smoking cannabis and a non-alcoholic cocktail. 350€ per person. Maximum 4 people. Alcohol is strictly prohibited during the dinner and prior to it. If you show up drunk to the appointment, you will not be allowed to participate, and you will lose your payment.</p>
+            <button class="book-button" onclick="openBookingForm('Dinner Weed')">Book Now</button>
+        </div>
+    </div>
+    <div class="footer">
+        &copy;THC Vault. All rights reserved.
+    </div>
+
     <script>
         // Your web app's Firebase configuration
         var firebaseConfig = {
@@ -343,41 +383,15 @@
                 ease: "back.out(1.7)"
             });
         });
+
+        // Disabilita il clic destro
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // Avviso quando gli strumenti di sviluppo vengono aperti
+        window.addEventListener('devtoolschange', event => {
+            alert('DevTools aperti! Si prega di chiudere gli strumenti di sviluppo.');
+        });
     </script>
-</head>
-<body>
-    <div class="background-image"></div>
-    <a href="index.html" class="back-icon" aria-label="Go back to home">
-        <i class="fas fa-cannabis"></i>
-    </a>
-    <div class="container">
-        <img src="logo.png" alt="THC Vault Logo" class="logo">
-        <h1>Our Cannabis Club Tours</h1>
-
-        <div class="package">
-            <img src="pack1.png" alt="Package 1">
-            <h2>Package 1</h2>
-            <p>Tour of one of the best Cannabis Clubs in Tenerife. Top quality, top service. You will feel guided and assisted in your Cannabis tasting. Cost 20€ per person, products purchased at the club are at the client's expense. 1 welcome joint per person.</p>
-            <button class="book-button" onclick="openBookingForm('Package 1')">Book Now</button>
-        </div>
-
-        <div class="package">
-            <img src="pack2.png" alt="Package 2">
-            <h2>Package 2</h2>
-            <p>Tour of two of the best Cannabis Clubs in Tenerife. Top quality, top service. You will feel guided and assisted in your Cannabis tasting. Cost 20€ per person, products purchased at the club are at the client's expense. 1 welcome joint per person.</p>
-            <button class="book-button" onclick="openBookingForm('Package 2')">Book Now</button>
-        </div>
-
-        <div class="package">
-            <img src="dinner.png" alt="Dinner Weed">
-            <h2>Dinner Weed</h2>
-            <p>Dinner Weed. Cannabis-based dinner in a private villa. You will be introduced to a 3-course THC-infused tasting (starter, main course or second course, dessert), accompanied by extra smoking cannabis and a non-alcoholic cocktail. 350€ per person. Maximum 4 people. Alcohol is strictly prohibited during the dinner and prior to it. If you show up drunk to the appointment, you will not be allowed to participate, and you will lose your payment.</p>
-            <button class="book-button" onclick="openBookingForm('Dinner Weed')">Book Now</button>
-        </div>
-    </div>
-    <div class="footer">
-        &copy;THC Vault. All rights reserved.
-    </div>
 </body>
 </html>
 
