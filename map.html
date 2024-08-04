@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="THC Vault - Underground Social">
+    <meta name="keywords" content="Weed, Cannabis Club, Tenerife, THC Vault, Social, Chat">
+    <meta name="author" content="THC Vault">
+    <link rel="icon" href="logo.ico" type="image/x-icon">
+    <title>THC Vault - Underground Social</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Press Start 2P', cursive;
+            background-color: black;
+            color: white;
+            overflow-x: hidden;
+            -webkit-user-select: none; /* Chrome, Safari, Opera */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+            -webkit-touch-callout: none; /* Disable callout, replaces contextmenu in some devices */
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .logo {
+            max-width: 200px;
+            filter: drop-shadow(0 0 10px #ff0000);
+            animation: logoPulse 2s infinite;
+        }
+
+        @keyframes logoPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: red;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+            animation: flicker 2s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                text-shadow: 0 0 4px rgba(255, 0, 0, 0.7), 0 0 11px rgba(255, 0, 0, 0.7), 0 0 19px rgba(255, 0, 0, 0.7), 0 0 40px rgba(255, 0, 0, 0.7);
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+            }
+        }
+
+        .chat-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            margin-top: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .chat-box {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-box div {
+            padding: 5px;
+            margin-bottom: 5px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 5px;
+        }
+
+        #chat-input {
+            width: calc(100% - 80px);
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px;
+            background: #00ff00;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #00cc00;
+        }
+
+        #map-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        #map {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        .leaflet-marker-icon {
+            filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        .leaflet-popup-tip {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .back-icon {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 2rem;
+            color: #00ff00;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .back-icon:hover {
+            color: #ff0000;
+        }
+
+        .custom-div-icon .marker-pin {
+            width: 30px;
+            height: 42px;
+            background-color: #00cc00;
+            position: absolute;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            left: 50%;
+            top: 50%;
+            margin-left: -15px;
+            margin-top: -21px;
+        }
+
+        .custom-div-icon .marker-pin::after {
+            content: '';
+            width: 24px;
+            height: 24px;
+            margin: 3px 0 0 3px;
+            background: url('logo.ico') no-repeat center center;
+            background-size: cover;
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        .custom-div-icon .club-name {
+            position: absolute;
+            width: 100px;
+            left: 50%;
+            top: -20px;
+            margin-left: -50px;
+            text-align: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            background: #00cc00;
+            border-radius: 5px;
+            padding: 2px;
+        }
+
+    </style>
+</head>
+<body oncontextmenu="return false;">
+    <div class="background-image"></div>
+    <a href="index.html" class="back-icon" aria-label="Go back to home">
+        <i class="fas fa-cannabis"></i>
+    </a>
+    <div class="container">
+        <img src="logo.png" alt="THC Vault Logo" class="logo">
+        <h1>Underground Social</h1>
+        <p class="intro">Chat with the community and explore the map of Tenerife's cannabis clubs</p>
+        
+        <!-- Sezione Chat -->
+        <div class="chat-container">
+            <h2>Real-Time Chat</h2>
+            <div id="chat-box" class="chat-box"></div>
+            <input type="text" id="chat-input" placeholder="Write a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+
+        <!-- Sezione Mappa -->
+        <div id="map-container">
+            <h2>Interactive Map</h2>
+            <div id="map"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Configurazione Firebase
+        var firebaseConfig = {
+            apiKey: "AIzaSyA49iSn7qBR7TaL9q4l8X1a0HmFOaudtxs",
+            authDomain: "thcvault-6a800.firebaseapp.com",
+            databaseURL: "https://thcvault-6a800-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "thcvault-6a800",
+            storageBucket: "thcvault-6a800.appspot.com",
+            messagingSenderId: "746310807606",
+            appId: "1:746310807606:web:20ccf6ea569cbf68f0a897",
+            measurementId: "G-GT435NPY50"
+        };
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.database();
+
+        // Funzione per inviare messaggi
+        function sendMessage() {
+            var message = document.getElementById('chat-input').value;
+            if (message !== '') {
+                var timestamp = new Date().toISOString();
+                db.ref('chat').push({
+                    message: message,
+                    timestamp: timestamp
+                });
+                document.getElementById('chat-input').value = '';
+            }
+        }
+
+        // Funzione per ricevere messaggi
+        db.ref('chat').on('value', (snapshot) => {
+            var chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML = '';
+            snapshot.forEach((childSnapshot) => {
+                var messageData = childSnapshot.val();
+                var messageElement = document.createElement('div');
+                messageElement.innerText = `${new Date(messageData.timestamp).toLocaleTimeString()}: ${messageData.message}`;
+                chatBox.appendChild(messageElement);
+            });
+        });
+
+        // Pulizia della chat ogni 24 ore
+        function clearChat() {
+            var cutoff = new Date();
+            cutoff.setDate(cutoff.getDate() - 1);
+            var cutoffTime = cutoff.toISOString();
+
+            db.ref('chat').orderByChild('timestamp').endAt(cutoffTime).once('value', function(snapshot) {
+                snapshot.forEach(function(childSnapshot) {
+                    childSnapshot.ref.remove();
+                });
+            });
+        }
+
+        // Pianificare la pulizia della chat ogni 24 ore
+        setInterval(clearChat, 24 * 60 * 60 * 1000);
+        clearChat();  // Esegui subito la pulizia all'avvio
+
+        // Inizializzazione della mappa centrata su Tenerife
+        var map = L.map('map').setView([28.2916, -16.6291], 11); // Centrare su Tenerife
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Marker per i club con link a Google Maps
+        var clubs = [
+            {"name": "CannaCave", "lat": 28.081538434233305, "lng": -16.732937247106197, "url": "https://www.google.es/maps/place/CannaCave/@28.0814438,-16.7355336,17z/data=!3m1!4b1!4m6!3m5!1s0xc6a97f8c8e310d9:0xd68b442ccb99f1a3!8m2!3d28.0814438!4d-16.7329587!16s%2Fg%2F11w2zxw4mm?entry=ttu"},
+            {"name": "HeadQuarters 420", "lat": 28.05159897145167, "lng": -16.720052291284023, "url": "https://www.google.es/maps/place/Headquarters420/@28.0514475,-16.722595,17z/data=!3m2!4b1!5s0xc6a982b19ab2fc7:0x969b0e4b2840e826!4m6!3m5!1s0xc6a99a41a134d75:0x98cb7103fb8d686a!8m2!3d28.0514475!4d-16.7200201!16s%2Fg%2F11sy_xcl2z?entry=ttu"},
+            {"name": "HighSupplyCsc", "lat": 28.066222586770895, "lng": -16.729872704777453, "url": "https://www.google.es/maps/place/HighSupplyCsc/@28.0660238,-16.7324476,17z/data=!3m1!4b1!4m6!3m5!1s0xc6a971198831997:0xefb525cfe38d7bf7!8m2!3d28.0660238!4d-16.7298727!16s%2Fg%2F11v0xshchz?entry=ttu"},
+            {"name": "El Jardin de Shiva", "lat": 28.181157774372167, "lng": -16.815441191278477, "url": "https://www.google.es/maps/place/El+Jard%C3%ADn+de+Shiva+CSC+Cannabis+Social+Club/@28.1810254,-16.8179839,17z/data=!3m1!4b1!4m6!3m5!1s0xc6a8f8357ab02cd:0xf131356609fffbcb!8m2!3d28.1810254!4d-16.815409!16s%2Fg%2F11vd34h9q1?entry=ttu"}
+        ];
+
+        clubs.forEach(function(club) {
+            var marker = L.marker([club.lat, club.lng], {
+                icon: L.divIcon({
+                    className: 'custom-div-icon',
+                    html: `<div class='marker-pin'></div><div class='club-name'>${club.name}</div>`,
+                    iconSize: [30, 42],
+                    iconAnchor: [15, 42]
+                })
+            }).addTo(map);
+
+            marker.bindPopup(`<b>${club.name}</b><br><a href="${club.url}" target="_blank">Get Directions</a>`);
+        });
+
+        // Prevenire il click con il tasto destro del mouse
+        document.addEventListener('contextmenu', event => event.preventDefault());
+    </script>
+</body>
+</html>
+
+
+
+
+
